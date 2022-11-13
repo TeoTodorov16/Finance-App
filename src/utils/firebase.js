@@ -3,6 +3,7 @@ import { initializeApp } from 'firebase/app';
 import {
     getAuth,
     signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
     signOut,
   } from 'firebase/auth';
 
@@ -27,6 +28,16 @@ const config = {
 const app = initializeApp(config);
 export const firebase = getAuth(app);
 export const database = getDatabase();
+
+/**
+ * @param {string} email 
+ * @param {string} password
+ * Envokes createUserWithEmailAndPassword from firebase/auth to create a new user wit the email and password choice in current environments firebase configuration.
+ * @returns {Promise} Up to you, the caller, to get resolution via .then and .catch. The response as paramterer in the .then() callback will contain `.user`
+ */
+ export const signup = (email, password) => {
+    return createUserWithEmailAndPassword(firebase, email, password);
+}
 
 /**
  * @param {string} email 
