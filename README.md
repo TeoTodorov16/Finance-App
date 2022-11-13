@@ -1,28 +1,16 @@
-# (very) Simple Blog (react-book-final)
-A minimal blog project using react and firebase. Based on the final assignment in [this react book](https://github.com/zgordon/react-book/tree/master/project)
+# $teward (a personal finance app)
+A category based budget built with react.js and firebase
 
 ## 'Product' Description
+Login or signup to to set a monthly category / envelope budget, track spending, allocate funds, transfer, deduct, and deposit. 
 
 
 ## Project Objective
+// flesh this out... 
 
+## Get Set Up (for devlopers that are forking or cloning)
 
-## Get Set Up (for devlopers that are forking)
-Get set up with Google's [Firebase](https://firebase.google.com/).
-Once you have an account, you  will be able to navigate to your dashboard settings which allows you to access your project settings. You'll be able to see credentials like, project name, api key, ect. 
-
-It's a bad idea to hard code your credentials in a .js file like this...
-```
-const config = {
-  apiKey: "placeholder",
-  authDomain: "placeholder",
-  databaseURL: "placeholder",
-  projectId: "placeholder",
-  storageBucket: "placeholder",
-  messagingSenderId: "placeholder"
-};
-```
-Instead, create a `.env.development.local` at the top level of your repository _(with / next to package.json)_, and assign your credentials to these variable names. 
+Create a `.env.development.local` at the top level of your repository _(with / next to package.json)_, and assign your credentials to these variable names. You'll need to create your own firebase account for your own credential keys (unless your a collaborator).
 ```
 REACT_APP_FIREBASE_API_KEY = placeholder
 REACT_APP_FIREBASE_AUTH_DOMAIN = placeholder
