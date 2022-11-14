@@ -1,0 +1,16 @@
+.App-message { 
+    background-color: var(--general-color); 
+    color: white;
+    padding: 2rem 1rem;
+    text-shadow: 0 1px 0 #444;
+    z-index: 900;
+  }
+  
+    .App-message.success {
+        background: var(--success-color);
+    }
+  
+    .App-message.error {
+        background: var(--error-color);
+    }
+  

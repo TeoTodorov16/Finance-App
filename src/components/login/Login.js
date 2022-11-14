@@ -1,7 +1,7 @@
 import react, { useState, useEffect } from 'react';
 import {
     login
-} from '../utils/firebase';
+} from '../../utils/firebase';
 import './login.css';
 
 const Login = () => {

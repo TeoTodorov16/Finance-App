@@ -1,7 +1,7 @@
 import react, { useState, useEffect } from 'react';
 import {
     signup
-} from '../utils/firebase';
+} from '../../utils/firebase';
 import './signup.css';
 
 const Signup = () => {

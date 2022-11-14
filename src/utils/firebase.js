@@ -70,12 +70,13 @@ export const deleteRecord = (bucket, key) => {
 }
 
 /**
- * @param {string} bucket the 'path' or sub for the database where the item to remove is stored.
- * @param {string} key the key of the item to remove from the database
- * @param {any} newRecord the object (or string, or int) to replace the current record in the current configured database at bucket/key
- * Envokes set(ref()) from firebase/database to update the record at the bucket (path) with passed key, to the new object provided. 
+ * @param {string} bucket the 'path' or sub for the database where the item to update is stored.
+ * @param {string} key the key of the item to update in the database
+ * @param {any} newRecord the object (or string, or int) to replace the current record 
+ * in the current configured database at bucket/key
+ * Envokes set(ref()) from firebase/database to update the record at the bucket / key
+ * to the new object provided. 
  * @returns {Promise} Up to you, the caller, to get resolution via .then and .catch
- 
  */
 export const updateRecord = (bucket, key, newRecord) => {
     return set(ref(database, `${bucket}/${key}`),newRecord);
@@ -83,17 +84,25 @@ export const updateRecord = (bucket, key, newRecord) => {
 
 /**
  * @param {string} bucket the 'path' or sub for the database where the item to create should be stored
- * @param {any} newRecord the object (or string, or int) to replace the current record in the current configured database at bucket/key
- * Envokes set(ref()) from firebase/database to create the newRecord at the bucket (path).
+ * @param {any} newRecord the object (or string, or int) to create the newRecord at the bucket (path).
  * @returns {Promise} Up to you, the caller, to get resolution via .then and .catch
  */
  export const createRecord = (bucket, newRecord) => {
     return push(ref(database, `${bucket}/`),newRecord);
 }
 
+/**
+ * @param {string} path the full bucket, key 'path' or sub for the database that we want a reference too
+ * @returns {Promise} Firebase live database ref... 
+ */
 export const getRef = (path) => {
     return ref(database, path)
 }
+
+/**
+ * Just a wrapper that returns onValue from firebase in case its needed elsewhere. 
+ * @returns {Promise} Firebase live database ref... 
+ */
 
 export const getOnValue = () => {
     return onValue;

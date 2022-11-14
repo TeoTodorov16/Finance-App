@@ -1,3 +1,9 @@
+html {
+  --general-color: #55A9D6;
+  --success-color: #51BB7A;
+  --error-color: #FF3F69;
+}
+
 .App {
   text-align: center;
 }

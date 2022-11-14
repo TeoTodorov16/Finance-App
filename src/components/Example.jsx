@@ -3,7 +3,7 @@ import './example.css';
 
 const Example = () => {
     return (
-        <div>
+        <div className = 'App-example'>
             Wassup
         </div>
     )
