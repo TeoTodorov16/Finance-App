@@ -12,7 +12,7 @@ const Message = (props) => {
 
     return(
         <div className = {`App-message ${type}`}>
-            <p className = {'container'} id = 'tempID'> 
+            <p className = {'container'}> 
                 <strong>{messages[type]}</strong> 
             </p>
         </div>
