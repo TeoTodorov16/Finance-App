@@ -1,7 +1,7 @@
 html {
-  --general-color: #55A9D6;
-  --success-color: #51BB7A;
-  --error-color: #FF3F69;
+  --general-message-color: #005b8ccc;
+  --success-message-color: #00702bc5;
+  --error-message-color: #80001cc5;
 }
 
 .App {

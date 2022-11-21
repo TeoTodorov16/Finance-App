@@ -2,7 +2,10 @@
 import PropTypes from 'prop-types'
 import './message.css';
 
-const Message = (props) => {
+const Message = ( props ) => {
+    if(!props.type || !props.message) {
+        return <></>
+    }
     const { type, message }  = props;
     const messages = {
         success: `Success! ${message}`,
@@ -11,13 +14,14 @@ const Message = (props) => {
     };
 
     return(
-        <div className = {`App-message ${type}`}>
-            <p className = {'container'}> 
-                <strong>{messages[type]}</strong> 
-            </p>
-        </div>
+        <div className = 'App-message-wrapper'>
+            <div className = {`App-message ${type}`}>
+                <p className = {'container'}> 
+                    <strong>{messages[type]}</strong> 
+                </p>
+            </div>
+        </div>     
     );
-
 };
 
 // props types as good practice. 
