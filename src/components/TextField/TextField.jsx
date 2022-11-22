@@ -1,3 +1,4 @@
+import './textField.css';
 /**
  * @param {props string} label this is the text to label the input
  * @param {props string} type this is a valid input attribute i.e. 'password'
@@ -5,17 +6,19 @@
  * @returns {div with p and input}
  * Standardizes a simple input with label form component.
  */
-export default TextField = ({ props }) => {
+export function TextField (props) {
     return (
         <div className = 'App-textfield-wrap'>
             <p className = 'App-textfield-label'>
-                { label }
+                { props.label }
             </p>
             <input 
                 className = 'App-textfield-input'
-                type = { type }
-                onChange = { onChange }
-            />
+                name = { props.name }
+                value = { props.value }
+                type = { props.type }
+                onChange = { props.onChange }
+            ></input>
         </div>
     )
 }
