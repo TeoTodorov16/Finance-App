@@ -15,7 +15,22 @@ import Login from './components/login/Login';
 // import Signup from './components/signup/Signup';
 import Message from './components/message/Message';
 import UserContext from './context/UserContext';
-import { Header, Button } from './components/OurComponents/OurComponents';
+import { Header } from './components/OurComponents/OurComponents';
+
+// material-ui 
+import {
+  Container,
+  AppBar,
+  Button,
+  Typography,
+  Page,
+  Card,
+  IconButton,
+  Toolbar
+} from '@mui/material';
+
+import LogoutIcon from '@mui/icons-material/Logout';
+import MenuIcon from '@mui/icons-material/Menu';
 
 function App() {
 
@@ -61,12 +76,24 @@ function App() {
   }
 
   return (
-    <div className = 'App-wrapper'>
-      <Header 
-        right = {
-          <Button label = {'LOGOUT'} onClick = {handleLogout}/>
-        } 
-      />
+    <Container>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            News
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
       <Message 
         type = { message?.type } 
         message = { message?.message } 
@@ -74,7 +101,7 @@ function App() {
       <UserContext.Provider value = {{ user, setUser, popMessage }} >
         <Example />
       </UserContext.Provider> 
-    </div>    
+    </Container>    
   );
 }
 
