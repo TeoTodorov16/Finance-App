@@ -1,0 +1,22 @@
+.App-header {
+    /* width: 100%; */
+    height: 10%;
+    margin-bottom: auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: solid 1px grey;
+
+}
+    .App-header-left {
+        margin-right: auto;
+    }
+
+    .App-header-middle {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .App-header-right {
+        margin-left: auto;
+    }

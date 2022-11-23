@@ -60,6 +60,7 @@ const Login = () => {
         .then((userCredential) => {
             setUser({
                 username: formValues.username,
+                password: formValues.password,
                 isAuth: true
             })
             popMessage('success',
