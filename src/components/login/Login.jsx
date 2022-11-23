@@ -50,7 +50,7 @@ const Login = () => {
     const validate = () => {
         const errors = {}
         return {};
-        // for(key in formValues) {
+        // for( [key, value] of Object(formValues)) {
 
         // }
     }
