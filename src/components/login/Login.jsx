@@ -9,7 +9,7 @@ import './login.css';
 const Login = () => {
 
     // grab setmessage for context... 
-    const { popMessage } = useContext(UserContext);
+    const { popMessage, setUser } = useContext(UserContext);
 
     const initialCredentials = {
         username: '',
@@ -56,10 +56,12 @@ const Login = () => {
     }
 
     const submit = () => {
-
         login(formValues.username, formValues.password)
         .then((userCredential) => {
-            console.log(userCredential.user);
+            setUser({
+                username: formValues.username,
+                isAuth: true
+            })
             popMessage('success',
             `Welcome, ${formValues.username}`);
         })

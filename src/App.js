@@ -19,7 +19,6 @@ function App() {
   const [ message, setMessage ] = useState(null); 
 
   /**
-   * 
    * @param {string} type specify if this is an 'error' a 'success' or 'general' for general (for styling)
    * @param {*} message what do you want the message to say?
    */
@@ -44,8 +43,9 @@ function App() {
         type = { message?.type } 
         message = { message?.message } 
       />
-      <UserContext.Provider value = {{ user, popMessage }} >
-        <Login />
+      <UserContext.Provider value = {{ user, setUser, popMessage }} >
+        { !user.isAuth && <Login /> }
+        <Example />
       </UserContext.Provider> 
     </div>    
   );
