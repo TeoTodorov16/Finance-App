@@ -1,11 +1,15 @@
-import react, { useState, useEffect } from 'react';
+import react, { useState, useEffect, useContext } from 'react';
 import {
     login
 } from '../../utils/firebase';
-import { TextField, Button } from '../OurComponents/OurComponents'
+import { TextField, Button } from '../OurComponents/OurComponents';
+import UserContext from '../../context/UserContext';
 import './login.css';
 
 const Login = () => {
+
+    // grab setmessage for context... 
+    const { popMessage } = useContext(UserContext);
 
     const initialCredentials = {
         username: '',
@@ -52,13 +56,17 @@ const Login = () => {
     }
 
     const submit = () => {
-        console.log(formValues);
+
         login(formValues.username, formValues.password)
         .then((userCredential) => {
             console.log(userCredential.user);
+            popMessage('success',
+            `Welcome, ${formValues.username}`);
         })
         .catch((error) => {
             console.error(error);
+            popMessage('error',
+            `Bad username or password. Try again.`);
         })
     }
 

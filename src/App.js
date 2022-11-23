@@ -18,6 +18,12 @@ function App() {
   const [ user, setUser ] = useState({});
   const [ message, setMessage ] = useState(null); 
 
+  /**
+   * 
+   * @param {string} type specify if this is an 'error' a 'success' or 'general' for general (for styling)
+   * @param {*} message what do you want the message to say?
+   */
+
   const popMessage = (type, message) => {
     setMessage({
       type,
@@ -38,7 +44,7 @@ function App() {
         type = { message?.type } 
         message = { message?.message } 
       />
-      <UserContext.Provider value = { user } >
+      <UserContext.Provider value = {{ user, popMessage }} >
         <Login />
       </UserContext.Provider> 
     </div>    
