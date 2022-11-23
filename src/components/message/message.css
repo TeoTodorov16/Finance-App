@@ -1,0 +1,21 @@
+.App-message-wrapper {
+    padding: 10px;
+}
+
+    .App-message { 
+        background-color: var(--general-message-color);
+        color: white;
+        padding: 2rem 1rem;
+        text-shadow: 0 1px 0 #444;
+        z-index: 900;
+        border-radius: 5px;
+    }
+  
+    .App-message.success {
+        background: var(--success-message-color);
+    }
+  
+    .App-message.error {
+        background: var(--error-message-color);
+    }
+  
