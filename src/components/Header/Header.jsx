@@ -78,19 +78,21 @@ export function Header() {
           >
             <MenuIcon />
           </IconButton>
-          <Box sx = {{width: '100%', display: 'flex', alignContent: 'center',}}>
-            <Typography sx={{marginRight: '10px'}} variant="h4" component="div">
+          <Box sx = {{width: '100%', display: 'flex'}}>
+            <Typography sx={{padding: '10px 10px 0px 0px'}} variant="h4" component="div">
                 🤑
             </Typography>
-            <Typography variant="h6" noWrap component="div">
+            <Typography sx={{padding: '12px 10px 0px 0px', fontWeight: '700'}} variant="h6" noWrap component="div">   
                 My Money App
             </Typography>
-            <IconButton sx = {{marginLeft: 'auto'}}>
-                {userTheme === 'dark' 
-                ? <LightMode onClick = {() => setUserTheme('light')} /> 
-                : <DarkMode onClick = {() => setUserTheme('dark')}/>
-                }
-            </IconButton>   
+            <Box mt = {.7} sx = {{ marginLeft: 'auto' }}>
+                <IconButton >
+                    {userTheme === 'dark' 
+                    ? <LightMode onClick = {() => setUserTheme('light')} /> 
+                    : <DarkMode onClick = {() => setUserTheme('dark')}/>
+                    }
+                </IconButton> 
+            </Box>   
           </Box>
         </Toolbar>
       </AppBar>
