@@ -28,7 +28,9 @@ import {
   Toolbar,
   styled,
   useTheme,
+  createTheme,
   CssBaseline,
+  ThemeProvider,
   Box
 } from '@mui/material';
 
@@ -39,6 +41,10 @@ function App() {
 
   // for menu open status 
   const [ open, setOpen ] = useState(false);
+
+  // for styles
+  const [ userTheme, setUserTheme ] = useState('dark');
+
 
   /**
    * @param {string} type specify if this is an 'error' a 'success' or 'general' for general (for styling)
@@ -75,6 +81,18 @@ function App() {
     justifyContent: 'flex-end',
   }));
 
+  const darkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+      },
+  });
+
+  const lightTheme = createTheme({
+    palette: {
+      mode: 'light',
+    },
+  });
+
   const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
       flexGrow: 1,
@@ -110,23 +128,27 @@ function App() {
 
   return (
     <>
-      <CssBaseline />
-      <UserContext.Provider value = {{
-        user,
-        handleLogout,
-        setUser,
-        popMessage,
-        open,
-        setOpen 
-      }} >
-        <Box sx={{ display: 'flex' }}>
-          <Header />
-          <Main open={open}>
-            <DrawerHeader />
-            <Dashboard />
-          </Main>
-        </Box>
-      </UserContext.Provider> 
+      <ThemeProvider theme = {userTheme === 'dark' ? darkTheme : lightTheme}>
+        <CssBaseline />
+        <UserContext.Provider value = {{
+          user,
+          handleLogout,
+          setUser,
+          popMessage,
+          open,
+          setOpen,
+          userTheme,
+          setUserTheme
+        }} >
+          <Box sx={{ display: 'flex' }}>
+            <Header />
+            <Main open={open}>
+              <DrawerHeader />
+              <Dashboard />
+            </Main>
+          </Box>
+        </UserContext.Provider> 
+      </ThemeProvider>
     </>    
   );
 }

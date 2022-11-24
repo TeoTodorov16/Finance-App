@@ -19,9 +19,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Avatar, Tooltip } from '@mui/material';
+import { Avatar, Icon, Tooltip } from '@mui/material';
 
 import LogoutIcon from '@mui/icons-material/Logout';
+import { DarkMode, LightMode } from '@mui/icons-material';
 
 const DRAWERWIDTH = 310;
 
@@ -53,7 +54,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export function Header() {
   const theme = useTheme();
-  const { open, setOpen, user, handleLogout } = useContext(UserContext);
+  const { open, setOpen, user, handleLogout, userTheme, setUserTheme } = useContext(UserContext);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -77,12 +78,20 @@ export function Header() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography sx={{marginRight: '10px'}} variant="h4" component="div">
-            🤑
-          </Typography>
-          <Typography variant="h6" noWrap component="div">
-            My Money App
-          </Typography>
+          <Box sx = {{width: '100%', display: 'flex', alignContent: 'center',}}>
+            <Typography sx={{marginRight: '10px'}} variant="h4" component="div">
+                🤑
+            </Typography>
+            <Typography variant="h6" noWrap component="div">
+                My Money App
+            </Typography>
+            <IconButton sx = {{marginLeft: 'auto'}}>
+                {userTheme === 'dark' 
+                ? <LightMode onClick = {() => setUserTheme('light')} /> 
+                : <DarkMode onClick = {() => setUserTheme('dark')}/>
+                }
+            </IconButton>   
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer
