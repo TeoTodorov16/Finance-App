@@ -36,16 +36,19 @@ import {
 
 import { grey, blueGrey } from '@mui/material/colors';
 
-function App() {
+import { useStorageState } from 'react-storage-hooks';
 
-  const [ user, setUser ] = useState({});
+function App() {
+  // const [value, setValue] 
+
+  const [ user, setUser ] = useStorageState(localStorage, 'state-user', {});
   const [ message, setMessage ] = useState(null); 
 
   // for menu open status 
   const [ open, setOpen ] = useState(false);
 
   // for styles
-  const [ userTheme, setUserTheme ] = useState('dark');
+  const [ userTheme, setUserTheme ] = useStorageState(localStorage, 'state-theme', 'dark');
 
 
   /**
