@@ -19,29 +19,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import { Avatar, Tooltip } from '@mui/material';
 
-const drawerWidth = 240;
+import LogoutIcon from '@mui/icons-material/Logout';
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    ...(open && {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    }),
-  }),
-);
+const DRAWERWIDTH = 310;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -51,8 +33,8 @@ const AppBar = styled(MuiAppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
+    width: `calc(100% - ${DRAWERWIDTH}px)`,
+    marginLeft: `${DRAWERWIDTH}px`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -71,11 +53,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export function Header() {
   const theme = useTheme();
-  const { open, setOpen } = useContext(UserContext);
+  const { open, setOpen, user, handleLogout } = useContext(UserContext);
 
   const handleDrawerOpen = () => {
     setOpen(true);
-  };
+  }; 
 
   const handleDrawerClose = () => {
     setOpen(false);
@@ -95,17 +77,20 @@ export function Header() {
           >
             <MenuIcon />
           </IconButton>
+          <Typography sx={{marginRight: '10px'}} variant="h4" component="div">
+            🤑
+          </Typography>
           <Typography variant="h6" noWrap component="div">
-            Persistent drawer
+            My Money App
           </Typography>
         </Toolbar>
       </AppBar>
       <Drawer
         sx={{
-          width: drawerWidth,
+          width: DRAWERWIDTH,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            width: drawerWidth,
+            width: DRAWERWIDTH,
             boxSizing: 'border-box',
           },
         }}
@@ -113,39 +98,35 @@ export function Header() {
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
+        <DrawerHeader sx = {{
+            padding: '0px 20px 0px 20px',
+            height: '100px',
+            display: 'flex',
+            justifyContent: 'space-between'
+        }}>
+          <Avatar size = {30} /> 
+          <Typography> {user.username} </Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
+            <ListItem key = { 1 } disablePadding onClick = {handleLogout}>
               <ListItemButton>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    <IconButton>
+                        <Tooltip title = 'Logout'>
+                            <LogoutIcon/>
+                        </Tooltip>    
+                    </IconButton> 
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary = { 'I\'m done'} />
               </ListItemButton>
             </ListItem>
-          ))}
         </List>
         <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
       </>
-
   );
 }

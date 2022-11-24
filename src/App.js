@@ -94,7 +94,7 @@ function App() {
     }),
   );
 
-  if ( !user ) {
+  if ( !user.isAuth ) {
     return (
       <div className = 'App-wrapper'>
         <Message 
@@ -111,7 +111,14 @@ function App() {
   return (
     <>
       <CssBaseline />
-      <UserContext.Provider value = {{ user, setUser, popMessage, open, setOpen }} >
+      <UserContext.Provider value = {{
+        user,
+        handleLogout,
+        setUser,
+        popMessage,
+        open,
+        setOpen 
+      }} >
         <Box sx={{ display: 'flex' }}>
           <Header />
           <Main open={open}>
