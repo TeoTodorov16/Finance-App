@@ -2,7 +2,13 @@ import react, { useState, useEffect, useContext } from 'react';
 import {
     login
 } from '../../utils/firebase';
-import { TextField, Button } from '../OurComponents/OurComponents';
+import {
+    TextField,
+    Button,
+    Box,
+    Paper,
+    Typography,
+} from '@mui/material';
 import UserContext from '../../context/UserContext';
 import './login.css';
 
@@ -74,26 +80,30 @@ const Login = () => {
     }
 
     return (
-        <div className = 'App-login-wrapper'>
+        <Box sx = {{ height: '100%', width: '100%', margin: '10px'}}>
+
             <form className = 'App-login-form' onSubmit = {handleSubmit}>
-                <TextField 
-                    label = {'username'}
-                    name = {'username'}
-                    value = {formValues.username}
-                    onChange = {handleChange}
-                />
-                <TextField 
-                    label = {'password'}
-                    name = {'password'}
-                    value = {formValues.password}
-                    type = {'password'}
-                    onChange = {handleChange}
-                />
-                <Button type = 'submit' label = 'LOGIN'>
-                    
+                <Box sx = {{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                    <TextField 
+                        label = {'username'}
+                        name = {'username'}
+                        value = {formValues.username}
+                        onChange = {handleChange}
+                    />
+                    <TextField 
+                        label = {'password'}
+                        name = {'password'}
+                        value = {formValues.password}
+                        type = {'password'}
+                        onChange = {handleChange}
+                    />
+                </Box>
+               
+                <Button variant = 'contained' onClick = {handleSubmit}>
+                    LOGIN
                 </Button>
             </form>
-        </div>
+        </Box>
     )
 }
 
