@@ -16,7 +16,6 @@ import Login from './components/login/Login';
 import Message from './components/message/Message';
 import UserContext from './context/UserContext';
 import { Header, Dashboard } from './components/OurComponents/OurComponents';
-
 // material-ui 
 import {
   Container,
@@ -26,15 +25,20 @@ import {
   Page,
   Card,
   IconButton,
-  Toolbar
+  Toolbar,
+  styled,
+  useTheme,
+  CssBaseline,
+  Box
 } from '@mui/material';
-
-import LogoutIcon from '@mui/icons-material/Logout';
 
 function App() {
 
   const [ user, setUser ] = useState({});
   const [ message, setMessage ] = useState(null); 
+
+  // for menu open status 
+  const [ open, setOpen ] = useState(false);
 
   /**
    * @param {string} type specify if this is an 'error' a 'success' or 'general' for general (for styling)
@@ -60,7 +64,37 @@ function App() {
     popMessage('general', 'Welcome!!')
   }, []);
 
-  if ( !user.isAuth ) {
+  const DRAWERWIDTH = 240;
+
+  const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+  }));
+
+  const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
+    ({ theme, open }) => ({
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      marginLeft: `-${DRAWERWIDTH}px`,
+      ...(open && {
+        transition: theme.transitions.create('margin', {
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0,
+      }),
+    }),
+  );
+
+  if ( !user ) {
     return (
       <div className = 'App-wrapper'>
         <Message 
@@ -76,9 +110,15 @@ function App() {
 
   return (
     <>
-      <UserContext.Provider value = {{ user, setUser, popMessage }} >
-        <Header />
-        <Dashboard />
+      <CssBaseline />
+      <UserContext.Provider value = {{ user, setUser, popMessage, open, setOpen }} >
+        <Box sx={{ display: 'flex' }}>
+          <Header />
+          <Main open={open}>
+            <DrawerHeader />
+            <Dashboard />
+          </Main>
+        </Box>
       </UserContext.Provider> 
     </>    
   );
