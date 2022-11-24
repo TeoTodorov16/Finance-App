@@ -34,6 +34,8 @@ import {
   Box
 } from '@mui/material';
 
+import { grey, blueGrey } from '@mui/material/colors';
+
 function App() {
 
   const [ user, setUser ] = useState({});
@@ -84,12 +86,16 @@ function App() {
   const darkTheme = createTheme({
     palette: {
         mode: 'dark',
+
       },
   });
 
   const lightTheme = createTheme({
     palette: {
       mode: 'light',
+      primary: {
+        main: blueGrey[300]
+      },
     },
   });
 
