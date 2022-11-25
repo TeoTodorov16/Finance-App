@@ -1,6 +1,7 @@
 import react, { useState, useEffect, useContext } from 'react';
 import {
-    login
+    login,
+    signup
 } from '../../utils/firebase';
 import {
     TextField,
@@ -27,6 +28,7 @@ const Login = () => {
 
     // set formValues will be called onChange of the username and password field pairs. 
     const [ formValues, setFormValues ] = useState(initialCredentials);
+    const [ signuping, setSignuping ] = useState(false);
     const [ isSubmitting, setIsSubmitting ] = useState(false);
     const [ formErrors, setFormErrors ] = useState({});
 
@@ -50,8 +52,9 @@ const Login = () => {
         setFormValues({...formValues, [name]: value})
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e, signingup) => {
         e.preventDefault();
+        setSignuping(signingup);
         setFormErrors({...validate(formValues)});
         setIsSubmitting(true);
     }
@@ -65,6 +68,19 @@ const Login = () => {
     }
 
     const submit = () => {
+        if ( signuping ) {
+            signup(formValues.username, formValues.password)
+                .then((userCredential) => {
+                    setUser({
+                        username: formValues.username,
+                        password: formValues.password,
+                        isAuth: true
+                    })
+                })
+                .catch((error) => {
+                    console.error(error);
+                })
+        }
         login(formValues.username, formValues.password)
         .then((userCredential) => {
             setUser({
@@ -72,13 +88,9 @@ const Login = () => {
                 password: formValues.password,
                 isAuth: true
             })
-            popMessage('success',
-            `Welcome, ${formValues.username}`);
         })
         .catch((error) => {
             console.error(error);
-            popMessage('error',
-            `Bad username or password. Try again.`);
         })
     }
 
@@ -125,7 +137,7 @@ const Login = () => {
                     <Box sx = {{ display: 'flex'}}>
                         <Button 
                             variant = 'contained' 
-                            onClick = {handleSubmit}
+                            onClick = {(e) => { handleSubmit(e, false) }}
                             sx = {{letterSpacing: '5px', marginLeft: 'auto'}}
                             endIcon = {<ArrowForwardIcon sx = {{marginLeft: '10px'}} /> }
                         >
@@ -142,7 +154,10 @@ const Login = () => {
                         }}>
                             or
                         </Typography>
-                        <Button sx = {{marginLeft: 'auto', letterSpacing: '3px'}}>
+                        <Button 
+                            onClick = {(e) => { handleSubmit(e, true) }}
+                            sx = {{marginLeft: 'auto', letterSpacing: '3px'}}
+                        >
                             signup
                         </Button>
                     </Box>

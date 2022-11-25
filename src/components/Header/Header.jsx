@@ -25,7 +25,7 @@ import { DarkMode, LightMode } from '@mui/icons-material';
 
 import { GiMoneyStack } from 'react-icons/gi';
 
-const DRAWERWIDTH = 310;
+const DRAWERWIDTH = 300;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -79,7 +79,7 @@ export function Header() {
           >
             <MenuIcon />
           </IconButton>
-          <Box sx = {{width: '100%', display: 'flex'}}>
+          <Box sx = {{ width: '100%', display: 'flex' }}>
             <Typography sx={{padding: '10px 10px 0px 0px'}} variant="h4" component="div">
                 <GiMoneyStack size = {40} style = {{
                   marginRight: '5px'
@@ -119,7 +119,7 @@ export function Header() {
             justifyContent: 'space-between'
         }}>
           <Avatar size = {30} /> 
-          <Typography> {user.username} </Typography>
+          <Typography> {user.username.split('@')[0]} </Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
