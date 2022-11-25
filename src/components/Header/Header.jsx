@@ -80,7 +80,7 @@ export function Header() {
           </IconButton>
           <Box sx = {{width: '100%', display: 'flex'}}>
             <Typography sx={{padding: '10px 10px 0px 0px'}} variant="h4" component="div">
-                🤑
+                💰 
             </Typography>
             <Typography sx={{padding: '12px 10px 0px 0px', fontWeight: '700'}} variant="h6" noWrap component="div">   
                 My Money App
