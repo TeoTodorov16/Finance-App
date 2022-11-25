@@ -83,12 +83,12 @@ const Login = () => {
     }
 
     return (
-            <Paper sx ={{
+            <Paper sx = {{
                 padding: '30px 40px 30px 40px',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '30px',
-                width: '350px'
+                gap: '20px',
+                width: '380px'
             }}> 
                 <Box sx = {{
                     display: 'flex',
@@ -105,7 +105,7 @@ const Login = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '20px',
-                        marginBottom: '20px'
+                        marginBottom: '30px'
                     }}>
                         <TextField 
                             label = {'username'}
@@ -133,6 +133,19 @@ const Login = () => {
                         </Button>
                     </Box>  
                     <Divider sx = {{margin: '20px 0px 20px 0px'}}/> 
+                    <Box sx = {{display: 'flex'}}>
+                        <Typography variant = 'h6' sx = {{
+                            color: 'grey',
+                            fontStyle: 'italic',
+                            letterSpacing: '3px',
+                            marginLeft: '5px'
+                        }}>
+                            or
+                        </Typography>
+                        <Button sx = {{marginLeft: 'auto', letterSpacing: '3px'}}>
+                            signup
+                        </Button>
+                    </Box>
                 </form>
             </Paper>
 

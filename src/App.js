@@ -33,6 +33,7 @@ import {
   ThemeProvider,
   Box
 } from '@mui/material';
+import { DarkMode, LightMode } from '@mui/icons-material';
 
 import { grey, blueGrey } from '@mui/material/colors';
 
@@ -127,12 +128,29 @@ function App() {
         <CssBaseline />
         <UserContext.Provider value = {{ user, setUser, popMessage }} >
           <Box sx = {{
-            height: '100vh',
             display: 'flex',
+            height: '100vh',
+            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center'
           }}>
-            <Login />
+            <Box mt = {.7} sx = {{ display: 'flex', marginLeft: 'auto'}}>
+                <IconButton sx = {{marginLeft: 'auto'}}>
+                    {userTheme === 'dark' 
+                    ? <LightMode onClick = {() => setUserTheme('light')} /> 
+                    : <DarkMode onClick = {() => setUserTheme('dark')}/>
+                    }
+                </IconButton> 
+            </Box>
+            <Box sx = {{
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <Login />
+            </Box>
           </Box>
         </UserContext.Provider> 
       </ThemeProvider>

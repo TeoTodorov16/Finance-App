@@ -5,5 +5,6 @@ const init = {
     password: '',
     isAuth: ''
 }
+
 const UserContext = createContext(init);
 export default UserContext;

@@ -20,9 +20,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Avatar, Icon, Tooltip } from '@mui/material';
-
 import LogoutIcon from '@mui/icons-material/Logout';
 import { DarkMode, LightMode } from '@mui/icons-material';
+
+import { GiMoneyStack } from 'react-icons/gi';
 
 const DRAWERWIDTH = 310;
 
@@ -80,7 +81,9 @@ export function Header() {
           </IconButton>
           <Box sx = {{width: '100%', display: 'flex'}}>
             <Typography sx={{padding: '10px 10px 0px 0px'}} variant="h4" component="div">
-                💰 
+                <GiMoneyStack size = {40} style = {{
+                  marginRight: '5px'
+                }}/> 
             </Typography>
             <Typography sx={{padding: '12px 10px 0px 0px', fontWeight: '700'}} variant="h6" noWrap component="div">   
                 My Money App
