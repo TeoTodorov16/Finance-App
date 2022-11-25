@@ -8,8 +8,11 @@ import {
     Box,
     Paper,
     Typography,
+    IconButton,
+    Divider
 } from '@mui/material';
 import UserContext from '../../context/UserContext';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import './login.css';
 
 const Login = () => {
@@ -80,30 +83,59 @@ const Login = () => {
     }
 
     return (
-        <Box sx = {{ height: '100%', width: '100%', margin: '10px'}}>
-
-            <form className = 'App-login-form' onSubmit = {handleSubmit}>
-                <Box sx = {{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <TextField 
-                        label = {'username'}
-                        name = {'username'}
-                        value = {formValues.username}
-                        onChange = {handleChange}
-                    />
-                    <TextField 
-                        label = {'password'}
-                        name = {'password'}
-                        value = {formValues.password}
-                        type = {'password'}
-                        onChange = {handleChange}
-                    />
+            <Paper sx ={{
+                padding: '30px 40px 30px 40px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '30px',
+                width: '350px'
+            }}> 
+                <Box sx = {{
+                    display: 'flex',
+                    justifyContent: 'center'
+                }}>
+                    <Typography variant = 'h5' sx = {{
+                        letterSpacing: '7px'
+                    }}>
+                        Hello
+                    </Typography>
                 </Box>
-               
-                <Button variant = 'contained' onClick = {handleSubmit}>
-                    LOGIN
-                </Button>
-            </form>
-        </Box>
+                <form onSubmit = {handleSubmit}>
+                    <Box sx = {{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '20px',
+                        marginBottom: '20px'
+                    }}>
+                        <TextField 
+                            label = {'username'}
+                            name = {'username'}
+                            value = {formValues.username}
+                            onChange = {handleChange}
+                        />
+                        <TextField 
+                            label = {'password'}
+                            name = {'password'}
+                            value = {formValues.password}
+                            type = {'password'}
+                            onChange = {handleChange}
+                        />
+                    </Box>
+
+                    <Box sx = {{ display: 'flex'}}>
+                        <Button 
+                            variant = 'contained' 
+                            onClick = {handleSubmit}
+                            sx = {{letterSpacing: '5px', marginLeft: 'auto'}}
+                            endIcon = {<ArrowForwardIcon sx = {{marginLeft: '10px'}} /> }
+                        >
+                            Login
+                        </Button>
+                    </Box>  
+                    <Divider sx = {{margin: '20px 0px 20px 0px'}}/> 
+                </form>
+            </Paper>
+
     )
 }
 

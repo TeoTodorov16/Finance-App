@@ -123,15 +123,21 @@ function App() {
 
   if ( !user.isAuth ) {
     return (
-      <div className = 'App-wrapper'>
-        <Message 
-          type = { message?.type } 
-          message = { message?.message } 
-        />
+      <ThemeProvider theme = {userTheme === 'dark' ? darkTheme: lightTheme}>
+        <CssBaseline />
         <UserContext.Provider value = {{ user, setUser, popMessage }} >
-          <Login /> 
+          <Box sx = {{
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <Login />
+          </Box>
         </UserContext.Provider> 
-      </div>    
+      </ThemeProvider>
+        
+    
     );
   } 
 
