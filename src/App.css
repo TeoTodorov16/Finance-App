@@ -3,3 +3,8 @@ html {
   --success-message-color: #00702bc5;
   --error-message-color: #80001cc5;
 }
+
+.App-wrapper {
+  height: 100vh;
+  width: 100vw;
+}
