@@ -2,7 +2,7 @@ import react, { useState, useEffect, useContext } from 'react';
 import {
     login,
     signup,
-    createRecord,
+    updateRecord,
 } from '../../utils/firebase';
 import {
     TextField,
@@ -69,10 +69,14 @@ const Login = () => {
     }
 
     const submit = () => {
+        
 
         if ( signuping ) {
             signup(formValues.username, formValues.password)
                 .then((userCredential) => {
+                    updateRecord(`users`,`${userCredential.user.uid}`, {
+                        email: formValues.username,
+                    }).then((x) => console.log(x));
                     setUser({
                         username: formValues.username,
                         password: formValues.password,
@@ -82,15 +86,11 @@ const Login = () => {
                 .catch((error) => {
                     console.error(error);
                 })
+            
         }
 
         login(formValues.username, formValues.password)
         .then((userCredential) => {
-            console.log(`users/${userCredential.user.uid}`);
-            createRecord(`users/${userCredential.user.uid}`, {
-                email: formValues.username,
-            }).then((x) => console.log(x));
-
             setUser({
                 username: formValues.username,
                 password: formValues.password,
