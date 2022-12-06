@@ -73,6 +73,11 @@ const Login = () => {
         if ( signuping ) {
             signup(formValues.username, formValues.password)
                 .then((userCredential) => {
+                    
+                    createRecord(`users/${userCredential.user.uid}`, {
+                        email: formValues.username,
+                    }).then((x) => console.log(x));
+
                     setUser({
                         username: formValues.username,
                         password: formValues.password,
@@ -87,9 +92,7 @@ const Login = () => {
         login(formValues.username, formValues.password)
         .then((userCredential) => {
             console.log(`users/${userCredential.user.uid}`);
-            createRecord(`users/${userCredential.user.uid}`, {
-                email: formValues.username,
-            }).then((x) => console.log(x));
+            
 
             setUser({
                 username: formValues.username,
