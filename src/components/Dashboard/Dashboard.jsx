@@ -1,6 +1,7 @@
 import { useEffect, useContext } from 'react';
 import { createCategory } from '../../utils/crud';
 import UserContext from '../../context/UserContext';
+import CreateCategory from '../CreateCategory/CreateCategory';
 
 export function Dashboard (props) {
 
@@ -12,6 +13,6 @@ export function Dashboard (props) {
     },[]);
 
     return (
-        <div>wassup</div>
+        <CreateCategory />
     )
 }
