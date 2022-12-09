@@ -1,8 +1,12 @@
 import { useEffect, useContext } from 'react';
-import { createCategory } from '../../utils/crud';
+import {
+    Box,
+    Paper,
+    Divider
+} from '@mui/material';
 import UserContext from '../../context/UserContext';
-
 import { CreateCategory } from '../CreateCategory/CreateCategory';
+import { ListCategories } from '../ListCategories/ListCategories';
 
 export function Dashboard (props) {
 
@@ -14,6 +18,10 @@ export function Dashboard (props) {
     },[]);
 
     return (
-        <CreateCategory />
+        <Box>
+            <CreateCategory />
+            <Divider />
+            <ListCategories />
+        </Box>
     )
 }

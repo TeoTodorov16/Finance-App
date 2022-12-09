@@ -7,18 +7,16 @@ import {
 } from '@mui/material';
 
 import {
-    createCategory
-} from '../../utils/crud';
+    getRef,
+    createRecord,
+    updateRecord
+} from '../../utils/firebase';
 
 import UserContext from '../../context/UserContext';
 
 export function CreateCategory() {
     
     const { user } = useContext(UserContext);
-
-    useEffect(()=>{
-        console.log(user);
-    },[]);
     
     const [ formValues, setFormValues ] = useState({
         name: '',
@@ -31,6 +29,10 @@ export function CreateCategory() {
             ...formValues,
             [name]:value
         });
+    }
+
+    const createCategory = (userID, category) => {
+        createRecord(`categories/${userID}`, category).then((x) => console.log(x));
     }
 
     const submit = (e) => {

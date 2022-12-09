@@ -154,8 +154,6 @@ function App() {
           </Box>
         </UserContext.Provider> 
       </ThemeProvider>
-        
-    
     );
   } 
 
