@@ -104,6 +104,4 @@ export const getRef = (path) => {
  * @returns {Promise} Firebase live database ref... 
  */
 
-export const getOnValue = () => {
-    return onValue;
-}
+export const getOnValue = onValue;

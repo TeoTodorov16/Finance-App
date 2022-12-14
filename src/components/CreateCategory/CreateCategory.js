@@ -39,7 +39,7 @@ export function CreateCategory() {
         e.preventDefault();
         createCategory(user.userID, {
             name: formValues.name,
-            value:formValues.balance
+            balance:formValues.balance
         });
     }
 
