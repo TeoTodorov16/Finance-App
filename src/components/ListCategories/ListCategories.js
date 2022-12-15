@@ -92,6 +92,11 @@ export const ListCategories = () => {
                                     height: '200px',
                                     width: '200px',
                                     display: 'flex',
+                                    '&:hover':{
+                                        margin:'-10px',
+                                        height: '220px',
+                                        width: '220px',
+                                    }
                                 }}>
                                     <CardActionArea>
                                         <CardContent>
