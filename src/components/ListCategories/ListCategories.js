@@ -15,25 +15,43 @@ import {
     Divider,
     Grid,
     CardActionArea,
-    Fab
+    Fab,
+    Tooltip
 } from '@mui/material';
 
 import AddIcon from '@mui/icons-material/Add';
-
 import UserContext from '../../context/UserContext';
+import { formatter } from '../../utils/genUtils';
 
 export const ListCategories = () => {
 
+    // data state
     const { user } = useContext(UserContext);
     const [ categories, setCategories ] = useState([]);
 
     // UI State 
+    const [ cardHover, setCardHover ] = useState(null);
+    const [ cardClicked, setCardClicked ] = useState(null);
 
-    const formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-    });
+    // FUNCTIONS // 
 
+    const getCategories = () => {
+        const ref = getRef(`categories/${user.userID}`);
+        getOnValue(ref, (snapshot) => {
+            const cats = snapshot.val();
+            const newCats = [];
+            for (let cat in cats) {
+              newCats.push({
+                id: cat,
+                name: cats[cat].name,
+                balance: cats[cat].balance,
+              });
+            }
+            setCategories(newCats);
+          });
+    }
+
+    // USE EFFECT //
     useEffect(() => {
         if (user.userID) {
             getCategories();
@@ -43,21 +61,6 @@ export const ListCategories = () => {
     useEffect(() => {
         console.log(categories); 
     },[categories.length]);
-
-    const getCategories = () => {
-        const ref = getRef(`categories/${user.userID}`);
-        getOnValue(ref, (snapshot) => {
-            const cats = snapshot.val();
-            const newCats = [];
-            for (let cat in cats) {
-              newCats.push({
-                name: cats[cat].name,
-                balance: cats[cat].balance,
-              });
-            }
-            setCategories(newCats);
-          });
-    }
 
     return(
         <Box sx = {{
@@ -88,17 +91,30 @@ export const ListCategories = () => {
                     { categories.map((x) => {
                         return (
                             <Grid item>
-                                <Card sx = {{
-                                    height: '200px',
-                                    width: '200px',
-                                    display: 'flex',
-                                    '&:hover':{
-                                        margin:'-10px',
-                                        height: '220px',
-                                        width: '220px',
-                                    }
-                                }}>
-                                    <CardActionArea>
+                                <Tooltip title = 'Click for more options'>
+                                    <Card 
+                                        onClick = {() => {
+                                            if (cardClicked) {
+                                                setCardClicked(null);
+                                            } else {
+                                                setCardClicked(x.id);
+                                            }
+                                        }}
+                                        onMouseEnter={()=>{setCardHover(x.id)}}
+                                        onMouseLeave={()=>{setCardHover(null); setCardClicked(null)}}
+                                        sx = { cardHover === x.id ? {
+                                            margin:'-10px',
+                                            height: '220px',
+                                            width: '220px',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                        } : {
+                                            height: '200px',
+                                            width: '200px',
+                                            display: 'flex',
+                                            flexDirection: 'column'
+                                    }}>
+                      
                                         <CardContent>
                                             <Typography variant = 'h5'>
                                                 {x.name}
@@ -106,11 +122,21 @@ export const ListCategories = () => {
                                             <Divider />
                                             <Typography>
                                                 {formatter.format(x.balance)}
-                                            </Typography>
+                                            </Typography>   
                                         </CardContent>
-                                    </CardActionArea>
-             
-                                </Card>
+                                        <Box sx = {{
+                                            marginTop: 'auto',
+                                            display: 'flex',
+                                            padding: '10px'
+                                        }}>
+                                            { cardClicked === x.id ? 
+                                                <Button>Yo</Button> 
+                                            : 
+                                                <></> 
+                                            }
+                                        </Box>         
+                                    </Card>
+                                </Tooltip>
                             </Grid>
                         )
                     }) }          
