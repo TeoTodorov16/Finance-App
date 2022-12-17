@@ -2,6 +2,7 @@ import react, { useEffect, useState, useContext } from 'react';
 import {
     getRef,
     getOnValue,
+    deleteRecord
 } from '../../utils/firebase';
 import {
     Box,
@@ -16,6 +17,7 @@ import {
     Fab,
     Tooltip,
     IconButton,
+    Skeleton
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -30,15 +32,18 @@ export const ListCategories = () => {
 
     // data state
     const { user } = useContext(UserContext);
-    const [ categories, setCategories ] = useState([]);
-
+    const [ categories, setCategories ] = useState(false);
     // UI State 
     const [ cardHover, setCardHover ] = useState(null);
     const [ cardClicked, setCardClicked ] = useState(null);
     const [ editorDialogOpen, setEditorDialogOpen ] = useState(false);
+    const [ cat, setCat ] = useState(null);
+
+    const setOpenWrapper = (x) => {
+        setEditorDialogOpen(x);
+    }
 
     // FUNCTIONS // 
-
     const getCategories = () => {
         const ref = getRef(`categories/${user.userID}`);
         getOnValue(ref, (snapshot) => {
@@ -69,7 +74,13 @@ export const ListCategories = () => {
     return(
         <Box sx = {{
             padding: '10px',
+            width: '98%',
         }}>
+            <CreateCategory
+                open = {editorDialogOpen}
+                cat = { cat }
+                setOpenWrapper = {setOpenWrapper}
+            />
             <Divider>
                 <Box sx = {{
                     margin: '0px 15px 0px 15px',
@@ -83,21 +94,27 @@ export const ListCategories = () => {
                     }}>
                         YOUR CATEGORIES
                     </Typography>
-                    <Fab 
-                        size = {'small'}
-                        color="primary"
-                        aria-label="add"
-                        sx ={{'&:hover': {transform: 'scale(1.2)'}}}
-                    >
-                        <AddIcon />
-                    </Fab>
+                    <Tooltip title = 'Create New Category'>
+                        <Fab 
+                            size = {'small'}
+                            color="primary"
+                            aria-label="add"
+                            sx ={{'&:hover': {transform: 'scale(1.2)'}}}
+                            onClick = {() => {
+                                setOpenWrapper(true);
+                                setCat(null);
+                            }}
+                        >
+                            <AddIcon />
+                        </Fab>
+                    </Tooltip>   
                 </Box>
             </Divider>
-                <Grid container spacing = {3} sx = {{margin: '15px'}}>  
-                    { categories.map((x) => {
+                <Grid container spacing = {3} sx = {{margin: '15px'}}>
+                    { categories?.length > 0 && categories.map((x) => {
                         return (
                             <Grid item>
-                                <Tooltip title = 'Click for more options'>
+                                <Tooltip>
                                     <Card 
                                         onClick = {() => {
                                             if (cardClicked) {
@@ -145,14 +162,24 @@ export const ListCategories = () => {
                                                     <IconButton>
                                                         <SwapHorizIcon />
                                                     </IconButton>
-                                                    <IconButton>
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                    <IconButton sx = {{
+                                                    <Box onClick = {() => {
+                                                        setCat(x);
+                                                        setEditorDialogOpen(true);
+                                                    }}>
+                                                        <IconButton>
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                    </Box>
+                                                    <Box onClick = {() => {
+                                                        deleteRecord(`categories/${user.userID}`, x.id);
+                                                    }}
+                                                    sx = {{
                                                         marginLeft: 'auto'
                                                     }}>
-                                                        <DeleteForeverIcon color= 'error'/>
-                                                    </IconButton>
+                                                        <IconButton >
+                                                            <DeleteForeverIcon color= 'error'/>
+                                                        </IconButton>
+                                                    </Box>  
                                                 </Box>  
                                             : 
                                                 <></> 
@@ -162,7 +189,66 @@ export const ListCategories = () => {
                                 </Tooltip>
                             </Grid>
                         )
-                    }) }          
+                    }) } 
+                    
+                    {/* {
+                        categories === false && 
+                        <Grid 
+                            container 
+                            spacing = {3} 
+                            sx = {{margin: '15px'}}
+                        > 
+                            <Grid item>
+                                <Skeleton 
+                                    sx = {{
+                                        borderRadius: '5px'
+                                    }}
+                                    variant = 'rectangular' 
+                                    height = {200}
+                                    width = {200}
+                                /> 
+                            </Grid>
+                            <Grid item>
+                                <Skeleton 
+                                    sx = {{
+                                        borderRadius: '5px'
+                                    }}
+                                    variant = 'rectangular' 
+                                    height = {200}
+                                    width = {200}
+                                /> 
+                            </Grid>
+                            <Grid item>
+                                <Skeleton 
+                                    sx = {{
+                                        borderRadius: '5px'
+                                    }}
+                                    variant = 'rectangular' 
+                                    height = {200}
+                                    width = {200}
+                                /> 
+                            </Grid>
+                        </Grid>   
+                    } */}
+                    {/* { categories?.length === 0 && 
+                    <Box sx = {{
+                        margin: '15px',
+                        height: '100%',
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection: 'column'
+                    }}>
+                        <Typography variant = 'h5' color = 'error'>
+                            Looks like you don't have any categories.
+                        </Typography>
+                        <Typography color = 'primary'>
+                            To better track your spending click the big + icon above to get started making categories.
+                        </Typography>
+
+                    </Box>
+                    } */}         
                 </Grid>     
         </Box>
     );

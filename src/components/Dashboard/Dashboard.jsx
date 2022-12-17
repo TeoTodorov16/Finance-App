@@ -12,7 +12,9 @@ export function Dashboard (props) {
     const { user } = useContext(UserContext);
 
     return (
-        <Box>
+        <Box sx = {{
+            display: 'flex'
+        }}>
             <ListCategories />
         </Box>
     )
