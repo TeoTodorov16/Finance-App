@@ -97,13 +97,14 @@ export function CreateCategory(props) {
                    {cat ? `Edit ${cat.name}` : `Create New Category`} 
                 </DialogTitle>
                 <Divider />
-                <Box sx = {{
+                <form style = {{
                     display:'flex',
                     flexDirection: 'column',
                     gap: '10px',
                     padding: '10px'
                 }}>
                     <TextField 
+                        autoFocus = {true}
                         label = 'Category Name'
                         name = {'name'}
                         value = {formValues.name || ''} 
@@ -115,7 +116,7 @@ export function CreateCategory(props) {
                         value = {formValues.balance ? formValues.balance : formValues.balance == '0' ? formValues.balance : ''}
                         onChange = {handleChange} 
                     />
-                </Box>
+                </form>
                 <Divider />
                 <Box sx = {{
                     display:'flex',

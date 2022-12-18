@@ -2,7 +2,8 @@ import react, { useEffect, useState, useContext } from 'react';
 import {
     getRef,
     getOnValue,
-    deleteRecord
+    deleteRecord,
+    updateRecord
 } from '../../utils/firebase';
 import {
     Box,
@@ -17,7 +18,8 @@ import {
     Fab,
     Tooltip,
     IconButton,
-    Skeleton
+    Skeleton,
+    TextField
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -33,6 +35,8 @@ export const ListCategories = () => {
     // data state
     const { user } = useContext(UserContext);
     const [ categories, setCategories ] = useState(false);
+    const [ value, setValue ] = useState();
+    
     // UI State 
     const [ cardHover, setCardHover ] = useState(null);
     const [ cardClicked, setCardClicked ] = useState(null);
@@ -41,6 +45,38 @@ export const ListCategories = () => {
 
     const setOpenWrapper = (x) => {
         setEditorDialogOpen(x);
+    }
+
+    const updateCat = (val, isDeposit, category) => {
+        if (isDeposit) {
+            val*=-1;
+        }
+        updateRecord(`categories/${user.userID}`, category.id, category)
+        .then();
+    }
+
+    const updateCatQuick = (val, category) => {
+        if (val.includes('-')) {
+            val = val.replace('-','');
+            if(!isNaN(val)) {
+                const newBal = Number(category.balance) - Number(val);
+                category['balance'] = newBal;
+                updateRecord(`categories/${user.userID}`, category.id, category)
+                .then((res)=>{
+                    setValue('');
+                });
+            }
+        } else {
+            if(!isNaN(val)) {
+                const newBal = Number(category.balance) + Number(val);
+                category['balance'] = newBal;
+                updateRecord(`categories/${user.userID}`, category.id, category)
+                .then((res)=>{
+                    setValue('')
+                });
+            }
+        }
+        
     }
 
     // FUNCTIONS // 
@@ -60,12 +96,17 @@ export const ListCategories = () => {
           });
     }
 
+    const handleEnter = () => {
+        console.log(value);      
+    }
+
     // USE EFFECT //
     useEffect(() => {
         if (user.userID) {
             getCategories();
         }   
     },[]);
+
 
     useEffect(() => {
         console.log(categories); 
@@ -114,7 +155,7 @@ export const ListCategories = () => {
                     { categories?.length > 0 && categories.map((x) => {
                         return (
                             <Grid item>
-                                <Tooltip>
+                                <Tooltip title = 'Click to withdraw or deposit'>
                                     <Card 
                                         onClick = {() => {
                                             if (cardClicked) {
@@ -123,18 +164,24 @@ export const ListCategories = () => {
                                                 setCardClicked(x.id);
                                             }
                                         }}
-                                        onMouseEnter={()=>{setCardHover(x.id)}}
-                                        onMouseLeave={()=>{setCardHover(null); setCardClicked(null)}}
+                                        onMouseEnter={() => {
+                                            setCardHover(x.id);
+                                        }}
+                                        onMouseLeave={() => { 
+                                            setCardHover(null); 
+                                            setCardClicked(null);
+                                            setValue('');
+                                        }}
                                         sx = { cardHover === x.id ? {
                                             margin:'-10px',
-                                            height: '220px',
-                                            width: '220px',
+                                            height: '250px',
+                                            width: '250px',
                                             display: 'flex',
                                             flexDirection: 'column',
                                             cursor: 'pointer',
                                         } : {
-                                            height: '200px',
-                                            width: '200px',
+                                            height: '220px',
+                                            width: '220px',
                                             display: 'flex',
                                             flexDirection: 'column',
                                             cursor: 'pointer'
@@ -149,10 +196,54 @@ export const ListCategories = () => {
                                                 {formatter.format(x.balance)}
                                             </Typography>   
                                         </CardContent>
+
+                                        {(cardHover === x.id || cardClicked === x.id) &&
+                                                <Box sx = {{
+                                                    display: 'flex',
+                                                    gap: '10px',
+                                                    padding: '20px',
+                                                    justifyContent: 'space-between'
+                                                }}>
+                                                    <IconButton sx = {{width: '40px', height: '40px'}}>
+                                                        -
+                                                    </IconButton>
+                                                    <form 
+                                                        style = {{width: '100%'}}
+                                                        onSubmit = {(e) => {
+                                                            e.preventDefault();
+                                                            if(!isNaN(value)) {
+                                                                updateCatQuick(value, x);
+                                                        }
+                                                    }}>
+                                                        <TextField
+                                                            autoFocus = {true}
+                                                            // focused = {true}
+                                                            variant = 'standard'
+                                                            sx = {{ width: '100%' }}
+                                                            onChange = {(e) => {
+                                                                setValue(e.target.value);
+                                                                console.log(e.target.value);
+                                                            }}
+                                                            value = {value}
+                                                            name = {'value'}
+                                                        />
+                                                    </form>
+
+                                                    
+                                                    <IconButton sx = {{width: '40px', height: '40px'}}>
+                                                        +
+                                                    </IconButton>
+
+                                                </Box>
+
+                                            
+                                            }
                                         
                                         <Box sx = {{
                                             marginTop: 'auto',
                                         }}>
+
+                                            
                                             
                                             { cardHover === x.id ? 
                                                 <Box sx = {{
@@ -235,7 +326,7 @@ export const ListCategories = () => {
                         margin: '15px',
                         height: '100%',
                         width: '100%',
-                        display: 'flex',
+                        display: 'flex', 
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexDirection: 'column'
