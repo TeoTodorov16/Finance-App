@@ -19,7 +19,10 @@ import {
     Tooltip,
     IconButton,
     Skeleton,
-    TextField
+    TextField,
+    Snackbar,
+    Alert,
+    Stack
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -37,26 +40,28 @@ export const ListCategories = () => {
     const { user } = useContext(UserContext);
     const [ categories, setCategories ] = useState(false);
     const [ value, setValue ] = useState();
+    const [ cat, setCat ] = useState(null);
     
     // UI State 
     const [ cardHover, setCardHover ] = useState(null);
     const [ cardClicked, setCardClicked ] = useState(null);
     const [ editorDialogOpen, setEditorDialogOpen ] = useState(false);
-    const [ cat, setCat ] = useState(null);
+    const [ transfer, setTransfer ] = useState(false);
+    const [ success, setSuccess ] = useState(false);
 
     const setOpenWrapper = (x) => {
         setEditorDialogOpen(x);
     }
 
-    const updateCat = (val, isDeposit, category) => {
+    const updateCat = (val, isDeposit, category, trans) => {
         if (!isDeposit) {
             updateCatQuick(`-${val}`, category);
             return;
         }
-        updateCatQuick(val, category);
+        updateCatQuick(val, category, trans);
     }
 
-    const updateCatQuick = (val, category) => {
+    const updateCatQuick = (val, category, trans) => {
         if (val.includes('-')) {
             val = val.replace('-','');
             if(!isNaN(val)) {
@@ -64,8 +69,9 @@ export const ListCategories = () => {
                 category['balance'] = newBal;
                 updateRecord(`categories/${user.userID}`, category.id, category)
                 .then((res)=>{
-                    setValue('');
+                    if(trans === false) {setValue('');}
                 });
+                
             }
         } else {
             if(!isNaN(val)) {
@@ -73,8 +79,9 @@ export const ListCategories = () => {
                 category['balance'] = newBal;
                 updateRecord(`categories/${user.userID}`, category.id, category)
                 .then((res)=>{
-                    setValue('')
+                    if(trans === false) {setValue('');}
                 });
+             
             }
         }
         
@@ -164,6 +171,11 @@ export const ListCategories = () => {
                                             } else {
                                                 setCardClicked(x.id);
                                             }
+                                            if (transfer) {
+                                                updateCatQuick(value, x, false);
+                                                setTransfer(false);
+                                                setSuccess(true);
+                                            }
                                         }}
                                         onMouseEnter={() => {
                                             setCardHover(x.id);
@@ -171,7 +183,9 @@ export const ListCategories = () => {
                                         onMouseLeave={() => { 
                                             setCardHover(null); 
                                             setCardClicked(null);
-                                            setValue('');
+                                            if (!transfer) {
+                                                setValue('');
+                                            }  
                                         }}
                                         sx = { cardHover === x.id ? {
                                             margin:'-10px',
@@ -198,7 +212,7 @@ export const ListCategories = () => {
                                             </Typography>   
                                         </CardContent>
 
-                                        {(cardHover === x.id || cardClicked === x.id) &&
+                                        {((cardHover === x.id || cardClicked === x.id) && !transfer) &&
                                                 <Box sx = {{
                                                     display: 'flex',
                                                     gap: '10px',
@@ -215,7 +229,7 @@ export const ListCategories = () => {
                                                                 }
                                                             }
                                                         }}
-                                                        onClick = {() => {updateCat(value, false, x)}}
+                                                        onClick = {() => {updateCat(value, false, x, false)}}
                                                     >
                                                         <RemoveIcon />
                                                     </IconButton>
@@ -224,7 +238,7 @@ export const ListCategories = () => {
                                                         onSubmit = {(e) => {
                                                             e.preventDefault();
                                                             if(!isNaN(value)) {
-                                                                updateCatQuick(value, x);
+                                                                updateCatQuick(value, x, false);
                                                         }
                                                     }}>
                                                         <TextField
@@ -243,7 +257,7 @@ export const ListCategories = () => {
 
                                                     
                                                     <IconButton
-                                                        onClick = {() => {updateCat(value, true, x)}} 
+                                                        onClick = {() => {updateCat(value, true, x, false)}} 
                                                         sx = {{ 
                                                             width: '40px',
                                                             height: '40px',
@@ -266,19 +280,36 @@ export const ListCategories = () => {
 
                                             
                                             
-                                            { cardHover === x.id ? 
+                                            { cardHover === x.id && !transfer? 
                                                 <Box sx = {{
                                                     display: 'flex',
                                                     padding: '0px 10px 5px 10px'
                                                 }}>
-                                                    <IconButton>
+                                                    <IconButton 
+                                                        onClick = {() => {
+                                                            setTransfer(!transfer);
+                                                            updateCat(value, false, x, true)               
+                                                        }}
+                                                        sx = {{
+                                                            '&:hover' : {
+                                                                '*' : {
+                                                                    color: (theme) => theme.palette.secondary.main
+                                                                }
+                                                            }
+                                                    }}>
                                                         <SwapHorizIcon />
                                                     </IconButton>
                                                     <Box onClick = {() => {
                                                         setCat(x);
                                                         setEditorDialogOpen(true);
                                                     }}>
-                                                        <IconButton>
+                                                        <IconButton sx = {{
+                                                        '&:hover' : {
+                                                            '*' : {
+                                                                color: (theme) => theme.palette.warning.main
+                                                            }
+                                                        }
+                                                    }}>
                                                             <EditIcon />
                                                         </IconButton>
                                                     </Box>
@@ -361,7 +392,19 @@ export const ListCategories = () => {
 
                     </Box>
                     } */}         
-                </Grid>     
+                </Grid>   
+       
+                <Snackbar open={transfer} autoHideDuration={8000} onClose={() => {}}>
+                    <Alert onClose={() => {}} severity="info" sx={{ width: '100%' }}>
+                        Choose a category to transfer {formatter.format(value)} to. Click anywhere else to abort.
+                    </Alert>
+                </Snackbar>  
+                <Snackbar open={success} autoHideDuration={6000} onClose={() => {setSuccess(true)}}>
+                    <Alert onClose={() => {setSuccess(false)}} severity="success" sx={{ width: '100%' }}>
+                        Nice. Monies tranfered. 
+                    </Alert>
+                </Snackbar> 
+      
         </Box>
     );
 }
