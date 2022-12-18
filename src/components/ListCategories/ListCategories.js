@@ -26,6 +26,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import UserContext from '../../context/UserContext';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 import { CreateCategory } from '../CreateCategory/CreateCategory';
 import { formatter } from '../../utils/genUtils';
@@ -48,11 +49,11 @@ export const ListCategories = () => {
     }
 
     const updateCat = (val, isDeposit, category) => {
-        if (isDeposit) {
-            val*=-1;
+        if (!isDeposit) {
+            updateCatQuick(`-${val}`, category);
+            return;
         }
-        updateRecord(`categories/${user.userID}`, category.id, category)
-        .then();
+        updateCatQuick(val, category);
     }
 
     const updateCatQuick = (val, category) => {
@@ -204,8 +205,19 @@ export const ListCategories = () => {
                                                     padding: '20px',
                                                     justifyContent: 'space-between'
                                                 }}>
-                                                    <IconButton sx = {{width: '40px', height: '40px'}}>
-                                                        -
+                                                    <IconButton sx = {{ 
+                                                        width: '40px',
+                                                        height: '40px',
+                                                        '&:hover' : 
+                                                            { 
+                                                                "*": {
+                                                                    color: (theme) => theme.palette.error.main
+                                                                }
+                                                            }
+                                                        }}
+                                                        onClick = {() => {updateCat(value, false, x)}}
+                                                    >
+                                                        <RemoveIcon />
                                                     </IconButton>
                                                     <form 
                                                         style = {{width: '100%'}}
@@ -230,13 +242,22 @@ export const ListCategories = () => {
                                                     </form>
 
                                                     
-                                                    <IconButton sx = {{width: '40px', height: '40px'}}>
-                                                        +
+                                                    <IconButton
+                                                        onClick = {() => {updateCat(value, true, x)}} 
+                                                        sx = {{ 
+                                                            width: '40px',
+                                                            height: '40px',
+                                                            '&:hover' : { 
+                                                                "*": {
+                                                                    color: (theme) => theme.palette.success.main
+                                                                  }
+                                                            }
+                                                            }}>
+                                                        <AddIcon />
                                                     </IconButton>
 
                                                 </Box>
-
-                                            
+  
                                             }
                                         
                                         <Box sx = {{

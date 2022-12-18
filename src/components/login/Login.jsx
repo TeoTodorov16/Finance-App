@@ -15,7 +15,6 @@ import {
 } from '@mui/material';
 import UserContext from '../../context/UserContext';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import './login.css';
 
 const Login = () => {
 
@@ -148,6 +147,7 @@ const Login = () => {
 
                     <Box sx = {{ display: 'flex'}}>
                         <Button 
+                            type = 'submit'
                             variant = 'contained' 
                             onClick = {(e) => { handleSubmit(e, false) }}
                             sx = {{letterSpacing: '5px', marginLeft: 'auto'}}
