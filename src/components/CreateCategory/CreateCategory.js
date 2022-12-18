@@ -6,7 +6,8 @@ import {
     Button,
     Dialog,
     Divider,
-    DialogTitle
+    DialogTitle,
+    IconButton
 } from '@mui/material';
 
 import {
@@ -16,6 +17,7 @@ import {
 } from '../../utils/firebase';
 
 import UserContext from '../../context/UserContext';
+import CloseIcon from '@mui/icons-material/Close';
 
 export function CreateCategory(props) {
 
@@ -93,9 +95,23 @@ export function CreateCategory(props) {
                 flexDirection: 'column',
                 margin: '10px'
             }}>
-                <DialogTitle>
-                   {cat ? `Edit ${cat.name}` : `Create New Category`} 
-                </DialogTitle>
+                <Box sx = {{
+                    width: '100%',
+                    display:'flex'
+                }}>
+
+                    <DialogTitle>
+                    {cat ? `Edit ${cat.name}` : `Create New Category`} 
+                    </DialogTitle>
+                    <Box onClick = {handleClose} sx ={{marginLeft: 'auto'}}>
+                        <IconButton>
+                            <CloseIcon />
+                        </IconButton>
+                    </Box>
+
+                </Box>
+
+                
                 <Divider />
                 <form style = {{
                     display:'flex',
@@ -123,12 +139,12 @@ export function CreateCategory(props) {
                     gap: '10px',
                     margin: '10px'
                 }}>
-                    <Button variant = {`outlined`} onClick = {submit}>
+                    <Button variant = {`contained`} onClick = {submit}>
                         {cat ? 'SAVE' : 'CREATE CATEGORY'}
                     </Button>
-                    <Button color = 'warning' onClick = {handleClose}>
+                    {/* <Button color = 'warning' onClick = {handleClose}>
                         ABORT
-                    </Button>
+                    </Button> */}
                 </Box>
             </Box>
             
