@@ -188,31 +188,61 @@ export const ListCategories = () => {
                                             }  
                                         }}
                                         sx = { cardHover === x.id ? {
-                                            margin:'-10px',
+                                            margin:'-20px',
+                                            height: '290px',
+                                            width: '290px',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            cursor: 'pointer',
+                                        } : {
                                             height: '250px',
                                             width: '250px',
                                             display: 'flex',
                                             flexDirection: 'column',
                                             cursor: 'pointer',
-                                        } : {
-                                            height: '220px',
-                                            width: '220px',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            cursor: 'pointer'
                                         }}>
                       
                                         <CardContent>
-                                            <Typography variant = 'h5'>
-                                                {x.name}
-                                            </Typography>
-                                            <Divider />
-                                            <Typography>
-                                                {formatter.format(x.balance)}
-                                            </Typography>   
+                                            <Box sx = {{
+                                                // display: 'flex',
+                                                // flexDirection: 'column',
+                                                // justifyContent: 'center',
+                                                // alignItems: 'center'
+                                            }}>
+                                                <Typography variant = 'h4' sx = {{
+                                                    width: '100%',
+                                                    textAlign: 'center',
+                                                    letterSpacing: '4px',
+                                                    //color: cardHover === x.id ? (theme) => theme.palette.secondary.main : (theme) => theme.palette.text
+                                                    fontWeight: cardHover === x.id ? 600 : 400
+                                                 }}>
+                                                    {x.name}
+                                                </Typography>
+                                                <Divider />
+                                                <Typography variant = 'h6' sx = {{
+                                                    width: '100%',
+                                                    textAlign: 'center'
+                                                }}>
+                                                    {formatter.format(x.balance)}
+                                                </Typography>
+                                            </Box>
+                                               
                                         </CardContent>
 
                                         {((cardHover === x.id || cardClicked === x.id) && !transfer) &&
+                                            <>
+                                                <Box sx = {{
+                                                    padding: '20px 20px 0px 20px',
+                                                    display:'flex',
+                                                    justifyContent: 'center'
+                                                }}>
+                                                    <Typography sx = {{
+                                                        letterSpacing: '2px',
+                                                        color: (theme) => theme.palette.text.disabled,
+                                                    }}>
+                                                        Withdraw (-) / Deposit (+)
+                                                    </Typography>
+                                                </Box>
                                                 <Box sx = {{
                                                     display: 'flex',
                                                     gap: '10px',
@@ -271,7 +301,7 @@ export const ListCategories = () => {
                                                     </IconButton>
 
                                                 </Box>
-  
+                                            </>
                                             }
                                         
                                         <Box sx = {{
