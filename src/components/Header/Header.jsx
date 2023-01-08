@@ -85,14 +85,14 @@ export function Header() {
                   marginRight: '5px'
                 }}/> 
             </Typography>
-            <Typography sx={{padding: '12px 10px 0px 0px', fontWeight: '700'}} variant="h6" noWrap component="div">   
+            <Typography sx={{padding: '12px 10px 0px 0px', fontWeight: '700', letterSpacing: '3px'}} variant="h6" noWrap component="div">   
                 My Money App
             </Typography>
             <Box mt = {.7} sx = {{ marginLeft: 'auto' }}>
-                <IconButton >
+                <IconButton onClick = {() => setUserTheme(userTheme === 'dark' ? 'light' : 'dark')}>
                     {userTheme === 'dark' 
-                    ? <LightMode onClick = {() => setUserTheme('light')} /> 
-                    : <DarkMode onClick = {() => setUserTheme('dark')}/>
+                    ? <LightMode /> 
+                    : <DarkMode />
                     }
                 </IconButton> 
             </Box>   
