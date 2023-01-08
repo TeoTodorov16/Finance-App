@@ -27,7 +27,7 @@ export function CreateCategory(props) {
     const [ formValues, setFormValues ] = useState({
         name: '',
         balance: 0.00,
-        goal: 0.00,
+        limit: 0.00,
     });
 
     useEffect(() => {
@@ -36,13 +36,13 @@ export function CreateCategory(props) {
                 ...formValues,
                 name: cat.name,
                 balance: cat.balance,
-                goal: cat.goal,
+                limit: cat.limit,
             })
         } else {
             setFormValues({
                 name: '',
                 balance: '',
-                goal: '',
+                limit: '',
             })
         }
     },[cat]);
@@ -52,7 +52,7 @@ export function CreateCategory(props) {
         setFormValues({
             name: '',
             balance: '',
-            goal: ''
+            limit: ''
         })
     }
 
@@ -80,14 +80,14 @@ export function CreateCategory(props) {
                 id: cat.id,
                 name: formValues.name,
                 balance:formValues.balance,
-                goal: formValues.goal,
+                limit: formValues.limit,
             });
             return;
         }
         createCategory(user.userID, {
             name: formValues.name,
             balance:formValues.balance,
-            goal: formValues.goal,
+            limit: formValues.limit,
         });
     }
 
@@ -139,9 +139,9 @@ export function CreateCategory(props) {
                         onChange = {handleChange} 
                     />
                     <TextField 
-                        label = 'Goal'
-                        name = {'goal'}
-                        value = {formValues.goal ? formValues.goal : formValues.goal == '0' ? formValues.goal : ''}
+                        label = 'limit'
+                        name = {'limit'}
+                        value = {formValues.limit ? formValues.limit : formValues.limit == '0' ? formValues.limit : ''}
                         onChange = {handleChange} 
                     />
                 </form>

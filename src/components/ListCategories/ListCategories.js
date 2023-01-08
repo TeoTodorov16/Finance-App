@@ -22,7 +22,8 @@ import {
     TextField,
     Snackbar,
     Alert,
-    Stack
+    Stack,
+    Chip
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -100,6 +101,7 @@ export const ListCategories = () => {
                 id: cat,
                 name: cats[cat].name,
                 balance: cats[cat].balance,
+                limit: cats[cat].limit
               });
             }
             setCategories(newCats);
@@ -225,27 +227,49 @@ export const ListCategories = () => {
                       
                                         <CardContent>
                                             <Box sx = {{
+                                                height: '100%'
                                                 // display: 'flex',
                                                 // flexDirection: 'column',
                                                 // justifyContent: 'center',
                                                 // alignItems: 'center'
                                             }}>
-                                                <Typography variant = 'h4' sx = {{
-                                                    width: '100%',
-                                                    textAlign: 'center',
-                                                    letterSpacing: '4px',
-                                                    //color: cardHover === x.id ? (theme) => theme.palette.secondary.main : (theme) => theme.palette.text
-                                                    fontWeight: cardHover === x.id ? 600 : 400
-                                                 }}>
-                                                    {x.name}
-                                                </Typography>
+                                                <Box sx = {{display: 'flex', alignItems: 'center', justifyContent: cardHover === x.id ? 'spaceBetween' : 'center', marginTop: '-5px', width: '100%'}}>
+                                                    <Typography variant = 'h4' sx = {{
+                                                        // width: '100%',
+                                                        // textAlign: 'left',
+                                                        letterSpacing: '4px',
+                                                        //color: cardHover === x.id ? (theme) => theme.palette.secondary.main : (theme) => theme.palette.text
+                                                        fontWeight: cardHover === x.id ? 600 : 400
+                                                    }}>
+                                                        {x.name}
+                                                    </Typography>
+                                                    {cardHover === x.id && <Typography
+                                                        variant = 'h6'
+                                                        sx = {{
+                                                            color: (theme) => theme.palette.text.disabled,
+                                                            marginBottom: '-8px',
+                                                            marginLeft: 'auto'
+                                                        }}>
+                                                        {formatter.format(x.limit)}
+                                                    </Typography>}
+                                                </Box>
                                                 <Divider />
-                                                <Typography variant = 'h6' sx = {{
-                                                    width: '100%',
-                                                    textAlign: 'center'
-                                                }}>
-                                                    {formatter.format(x.balance)}
-                                                </Typography>
+                                           
+                                                <Typography 
+                                                        variant = {cardHover === x.id ? 'h5' : 'h4'}
+                                                        sx = {cardHover === x.id ? {
+                                                        width: '100%',
+                                                        textAlign: 'center'
+                                                    } : {
+                                                        width: '100%',
+                                                        textAlign: 'center',
+                                                        marginTop: '50px'
+                                                    }}>
+                                                      {formatter.format(x.balance)}
+                                                    </Typography>
+                                          
+                                                     
+                                   
                                             </Box>
                                                
                                         </CardContent>
@@ -257,12 +281,12 @@ export const ListCategories = () => {
                                                     display:'flex',
                                                     justifyContent: 'center'
                                                 }}>
-                                                    <Typography sx = {{
+                                                    {/* <Typography sx = {{
                                                         letterSpacing: '2px',
                                                         color: (theme) => theme.palette.text.disabled,
                                                     }}>
                                                         Withdraw (-) / Deposit (+)
-                                                    </Typography>
+                                                    </Typography> */}
                                                 </Box>
                                                 <Box sx = {{
                                                     display: 'flex',

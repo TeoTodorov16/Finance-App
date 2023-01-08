@@ -90,7 +90,7 @@ const Login = () => {
 
         login(formValues.username, formValues.password)
         .then((userCredential) => {
-            console.log(`users/${userCredential.user.uid}`);
+           // console.log(`users/${userCredential.user.uid}`);
             
 
             setUser({
