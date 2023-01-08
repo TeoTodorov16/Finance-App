@@ -33,6 +33,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 
 import { CreateCategory } from '../CreateCategory/CreateCategory';
 import { formatter } from '../../utils/genUtils';
+import { Warning } from '@mui/icons-material';
 
 export const ListCategories = () => {
 
@@ -48,6 +49,7 @@ export const ListCategories = () => {
     const [ editorDialogOpen, setEditorDialogOpen ] = useState(false);
     const [ transfer, setTransfer ] = useState(false);
     const [ success, setSuccess ] = useState(false);
+    const [ noCats, setNoCats ] = useState(false);
 
     const setOpenWrapper = (x) => {
         setEditorDialogOpen(x);
@@ -117,7 +119,11 @@ export const ListCategories = () => {
 
 
     useEffect(() => {
-        console.log(categories); 
+        if(categories.length === 0) {
+            setNoCats(true);
+            return; 
+        } 
+        setNoCats(false);
     },[categories.length]);
 
     return(
@@ -160,9 +166,24 @@ export const ListCategories = () => {
                 </Box>
             </Divider>
                 <Grid container spacing = {3} sx = {{margin: '15px'}}>
+                    { noCats 
+                        && <Box sx = {{
+                            margin: '15px'
+                        }}>
+                            <Typography 
+                                variant = 'h6'
+                                sx = {{letterSpacing: '3px'
+                            }}>
+                                No categories to display.
+                            </Typography>
+                            <Typography sx = {{letterSpacing: '2px'}}> 
+                                Click the '+' button above to create categories and start your budget.
+                            </Typography>
+                    </Box> }
                     { categories?.length > 0 && categories.map((x) => {
                         return (
-                            <Grid item>
+                            <Grid item> 
+                                {/**This Card should probably be abstracted. */}
                                 <Tooltip title = 'Click to withdraw or deposit'>
                                     <Card 
                                         onClick = {() => {
