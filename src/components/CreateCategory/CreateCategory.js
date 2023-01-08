@@ -6,7 +6,8 @@ import {
     Button,
     Dialog,
     Divider,
-    DialogTitle
+    DialogTitle,
+    IconButton
 } from '@mui/material';
 
 import {
@@ -16,6 +17,7 @@ import {
 } from '../../utils/firebase';
 
 import UserContext from '../../context/UserContext';
+import CloseIcon from '@mui/icons-material/Close';
 
 export function CreateCategory(props) {
 
@@ -24,7 +26,8 @@ export function CreateCategory(props) {
 
     const [ formValues, setFormValues ] = useState({
         name: '',
-        balance: 0.00
+        balance: 0.00,
+        limit: 0.00,
     });
 
     useEffect(() => {
@@ -32,12 +35,14 @@ export function CreateCategory(props) {
             setFormValues({
                 ...formValues,
                 name: cat.name,
-                balance: cat.balance
+                balance: cat.balance,
+                limit: cat.limit,
             })
         } else {
             setFormValues({
                 name: '',
-                balance: ''
+                balance: '',
+                limit: '',
             })
         }
     },[cat]);
@@ -46,7 +51,8 @@ export function CreateCategory(props) {
         setOpenWrapper(false);
         setFormValues({
             name: '',
-            balance: ''
+            balance: '',
+            limit: ''
         })
     }
 
@@ -73,13 +79,15 @@ export function CreateCategory(props) {
             updateCategory(user.userID, {
                 id: cat.id,
                 name: formValues.name,
-                balance:formValues.balance
+                balance:formValues.balance,
+                limit: formValues.limit,
             });
             return;
         }
         createCategory(user.userID, {
             name: formValues.name,
-            balance:formValues.balance
+            balance:formValues.balance,
+            limit: formValues.limit,
         });
     }
 
@@ -93,17 +101,32 @@ export function CreateCategory(props) {
                 flexDirection: 'column',
                 margin: '10px'
             }}>
-                <DialogTitle>
-                   {cat ? `Edit ${cat.name}` : `Create New Category`} 
-                </DialogTitle>
-                <Divider />
                 <Box sx = {{
+                    width: '100%',
+                    display:'flex'
+                }}>
+
+                    <DialogTitle>
+                    {cat ? `Edit ${cat.name}` : `Create New Category`} 
+                    </DialogTitle>
+                    <Box onClick = {handleClose} sx ={{marginLeft: 'auto'}}>
+                        <IconButton>
+                            <CloseIcon />
+                        </IconButton>
+                    </Box>
+
+                </Box>
+
+                
+                <Divider />
+                <form style = {{
                     display:'flex',
                     flexDirection: 'column',
                     gap: '10px',
                     padding: '10px'
                 }}>
                     <TextField 
+                        autoFocus = {true}
                         label = 'Category Name'
                         name = {'name'}
                         value = {formValues.name || ''} 
@@ -115,19 +138,25 @@ export function CreateCategory(props) {
                         value = {formValues.balance ? formValues.balance : formValues.balance == '0' ? formValues.balance : ''}
                         onChange = {handleChange} 
                     />
-                </Box>
+                    <TextField 
+                        label = 'limit'
+                        name = {'limit'}
+                        value = {formValues.limit ? formValues.limit : formValues.limit == '0' ? formValues.limit : ''}
+                        onChange = {handleChange} 
+                    />
+                </form>
                 <Divider />
                 <Box sx = {{
                     display:'flex',
                     gap: '10px',
                     margin: '10px'
                 }}>
-                    <Button variant = {`outlined`} onClick = {submit}>
+                    <Button variant = {`contained`} onClick = {submit}>
                         {cat ? 'SAVE' : 'CREATE CATEGORY'}
                     </Button>
-                    <Button color = 'warning' onClick = {handleClose}>
+                    {/* <Button color = 'warning' onClick = {handleClose}>
                         ABORT
-                    </Button>
+                    </Button> */}
                 </Box>
             </Box>
             

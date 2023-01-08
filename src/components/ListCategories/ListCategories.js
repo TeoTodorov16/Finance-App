@@ -2,7 +2,8 @@ import react, { useEffect, useState, useContext } from 'react';
 import {
     getRef,
     getOnValue,
-    deleteRecord
+    deleteRecord,
+    updateRecord
 } from '../../utils/firebase';
 import {
     Box,
@@ -17,30 +18,76 @@ import {
     Fab,
     Tooltip,
     IconButton,
-    Skeleton
+    Skeleton,
+    TextField,
+    Snackbar,
+    Alert,
+    Stack,
+    Chip
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import UserContext from '../../context/UserContext';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 import { CreateCategory } from '../CreateCategory/CreateCategory';
 import { formatter } from '../../utils/genUtils';
+import { Warning } from '@mui/icons-material';
 
 export const ListCategories = () => {
 
     // data state
     const { user } = useContext(UserContext);
     const [ categories, setCategories ] = useState(false);
+    const [ value, setValue ] = useState();
+    const [ cat, setCat ] = useState(null);
+    
     // UI State 
     const [ cardHover, setCardHover ] = useState(null);
     const [ cardClicked, setCardClicked ] = useState(null);
     const [ editorDialogOpen, setEditorDialogOpen ] = useState(false);
-    const [ cat, setCat ] = useState(null);
+    const [ transfer, setTransfer ] = useState(false);
+    const [ success, setSuccess ] = useState(false);
+    const [ noCats, setNoCats ] = useState(false);
 
     const setOpenWrapper = (x) => {
         setEditorDialogOpen(x);
+    }
+
+    const updateCat = (val, isDeposit, category, trans) => {
+        if (!isDeposit) {
+            updateCatQuick(`-${val}`, category);
+            return;
+        }
+        updateCatQuick(val, category, trans);
+    }
+
+    const updateCatQuick = (val, category, trans) => {
+        if (val.includes('-')) {
+            val = val.replace('-','');
+            if(!isNaN(val)) {
+                const newBal = Number(category.balance) - Number(val);
+                category['balance'] = newBal;
+                updateRecord(`categories/${user.userID}`, category.id, category)
+                .then((res)=>{
+                    if(trans === false) {setValue('');}
+                });
+                
+            }
+        } else {
+            if(!isNaN(val)) {
+                const newBal = Number(category.balance) + Number(val);
+                category['balance'] = newBal;
+                updateRecord(`categories/${user.userID}`, category.id, category)
+                .then((res)=>{
+                    if(trans === false) {setValue('');}
+                });
+             
+            }
+        }
+        
     }
 
     // FUNCTIONS // 
@@ -54,10 +101,15 @@ export const ListCategories = () => {
                 id: cat,
                 name: cats[cat].name,
                 balance: cats[cat].balance,
+                limit: cats[cat].limit
               });
             }
             setCategories(newCats);
           });
+    }
+
+    const handleEnter = () => {
+        console.log(value);      
     }
 
     // USE EFFECT //
@@ -67,8 +119,13 @@ export const ListCategories = () => {
         }   
     },[]);
 
+
     useEffect(() => {
-        console.log(categories); 
+        if(categories.length === 0) {
+            setNoCats(true);
+            return; 
+        } 
+        setNoCats(false);
     },[categories.length]);
 
     return(
@@ -111,10 +168,25 @@ export const ListCategories = () => {
                 </Box>
             </Divider>
                 <Grid container spacing = {3} sx = {{margin: '15px'}}>
+                    { noCats 
+                        && <Box sx = {{
+                            margin: '15px'
+                        }}>
+                            <Typography 
+                                variant = 'h6'
+                                sx = {{letterSpacing: '3px'
+                            }}>
+                                No categories to display.
+                            </Typography>
+                            <Typography sx = {{letterSpacing: '2px'}}> 
+                                Click the '+' button above to create categories and start your budget.
+                            </Typography>
+                    </Box> }
                     { categories?.length > 0 && categories.map((x) => {
                         return (
-                            <Grid item>
-                                <Tooltip>
+                            <Grid item> 
+                                {/**This Card should probably be abstracted. */}
+                                <Tooltip title = 'Click to withdraw or deposit'>
                                     <Card 
                                         onClick = {() => {
                                             if (cardClicked) {
@@ -122,51 +194,197 @@ export const ListCategories = () => {
                                             } else {
                                                 setCardClicked(x.id);
                                             }
+                                            if (transfer) {
+                                                updateCatQuick(value, x, false);
+                                                setTransfer(false);
+                                                setSuccess(true);
+                                            }
                                         }}
-                                        onMouseEnter={()=>{setCardHover(x.id)}}
-                                        onMouseLeave={()=>{setCardHover(null); setCardClicked(null)}}
+                                        onMouseEnter={() => {
+                                            setCardHover(x.id);
+                                        }}
+                                        onMouseLeave={() => { 
+                                            setCardHover(null); 
+                                            setCardClicked(null);
+                                            if (!transfer) {
+                                                setValue('');
+                                            }  
+                                        }}
                                         sx = { cardHover === x.id ? {
-                                            margin:'-10px',
-                                            height: '220px',
-                                            width: '220px',
+                                            margin:'-20px',
+                                            height: '290px',
+                                            width: '290px',
                                             display: 'flex',
                                             flexDirection: 'column',
                                             cursor: 'pointer',
                                         } : {
-                                            height: '200px',
-                                            width: '200px',
+                                            height: '250px',
+                                            width: '250px',
                                             display: 'flex',
                                             flexDirection: 'column',
-                                            cursor: 'pointer'
+                                            cursor: 'pointer',
                                         }}>
                       
                                         <CardContent>
-                                            <Typography variant = 'h5'>
-                                                {x.name}
-                                            </Typography>
-                                            <Divider />
-                                            <Typography>
-                                                {formatter.format(x.balance)}
-                                            </Typography>   
+                                            <Box sx = {{
+                                                height: '100%'
+                                                // display: 'flex',
+                                                // flexDirection: 'column',
+                                                // justifyContent: 'center',
+                                                // alignItems: 'center'
+                                            }}>
+                                                <Box sx = {{display: 'flex', alignItems: 'center', justifyContent: cardHover === x.id ? 'spaceBetween' : 'center', marginTop: '-5px', width: '100%'}}>
+                                                    <Typography variant = 'h4' sx = {{
+                                                        // width: '100%',
+                                                        // textAlign: 'left',
+                                                        letterSpacing: '4px',
+                                                        //color: cardHover === x.id ? (theme) => theme.palette.secondary.main : (theme) => theme.palette.text
+                                                        fontWeight: cardHover === x.id ? 600 : 400
+                                                    }}>
+                                                        {x.name}
+                                                    </Typography>
+                                                    {cardHover === x.id && <Typography
+                                                        variant = 'h6'
+                                                        sx = {{
+                                                            color: (theme) => theme.palette.text.disabled,
+                                                            marginBottom: '-8px',
+                                                            marginLeft: 'auto'
+                                                        }}>
+                                                        {formatter.format(x.limit)}
+                                                    </Typography>}
+                                                </Box>
+                                                <Divider />
+                                           
+                                                <Typography 
+                                                        variant = {cardHover === x.id ? 'h5' : 'h4'}
+                                                        sx = {cardHover === x.id ? {
+                                                        width: '100%',
+                                                        textAlign: 'center'
+                                                    } : {
+                                                        width: '100%',
+                                                        textAlign: 'center',
+                                                        marginTop: '50px'
+                                                    }}>
+                                                      {formatter.format(x.balance)}
+                                                    </Typography>
+                                          
+                                                     
+                                   
+                                            </Box>
+                                               
                                         </CardContent>
+
+                                        {((cardHover === x.id || cardClicked === x.id) && !transfer) &&
+                                            <>
+                                                <Box sx = {{
+                                                    padding: '20px 20px 0px 20px',
+                                                    display:'flex',
+                                                    justifyContent: 'center'
+                                                }}>
+                                                    {/* <Typography sx = {{
+                                                        letterSpacing: '2px',
+                                                        color: (theme) => theme.palette.text.disabled,
+                                                    }}>
+                                                        Withdraw (-) / Deposit (+)
+                                                    </Typography> */}
+                                                </Box>
+                                                <Box sx = {{
+                                                    display: 'flex',
+                                                    gap: '10px',
+                                                    padding: '20px',
+                                                    justifyContent: 'space-between'
+                                                }}>
+                                                    <IconButton sx = {{ 
+                                                        width: '40px',
+                                                        height: '40px',
+                                                        '&:hover' : 
+                                                            { 
+                                                                "*": {
+                                                                    color: (theme) => theme.palette.error.main
+                                                                }
+                                                            }
+                                                        }}
+                                                        onClick = {() => {updateCat(value, false, x, false)}}
+                                                    >
+                                                        <RemoveIcon />
+                                                    </IconButton>
+                                                    <form 
+                                                        style = {{width: '100%'}}
+                                                        onSubmit = {(e) => {
+                                                            e.preventDefault();
+                                                            if(!isNaN(value)) {
+                                                                updateCatQuick(value, x, false);
+                                                        }
+                                                    }}>
+                                                        <TextField
+                                                            autoFocus = {true}
+                                                            // focused = {true}
+                                                            variant = 'standard'
+                                                            sx = {{ width: '100%' }}
+                                                            onChange = {(e) => {
+                                                                setValue(e.target.value);
+                                                                console.log(e.target.value);
+                                                            }}
+                                                            value = {value}
+                                                            name = {'value'}
+                                                        />
+                                                    </form>
+
+                                                    
+                                                    <IconButton
+                                                        onClick = {() => {updateCat(value, true, x, false)}} 
+                                                        sx = {{ 
+                                                            width: '40px',
+                                                            height: '40px',
+                                                            '&:hover' : { 
+                                                                "*": {
+                                                                    color: (theme) => theme.palette.success.main
+                                                                  }
+                                                            }
+                                                            }}>
+                                                        <AddIcon />
+                                                    </IconButton>
+
+                                                </Box>
+                                            </>
+                                            }
                                         
                                         <Box sx = {{
                                             marginTop: 'auto',
                                         }}>
+
                                             
-                                            { cardHover === x.id ? 
+                                            
+                                            { cardHover === x.id && !transfer? 
                                                 <Box sx = {{
                                                     display: 'flex',
                                                     padding: '0px 10px 5px 10px'
                                                 }}>
-                                                    <IconButton>
+                                                    <IconButton 
+                                                        onClick = {() => {
+                                                            setTransfer(!transfer);
+                                                            updateCat(value, false, x, true)               
+                                                        }}
+                                                        sx = {{
+                                                            '&:hover' : {
+                                                                '*' : {
+                                                                    color: (theme) => theme.palette.secondary.main
+                                                                }
+                                                            }
+                                                    }}>
                                                         <SwapHorizIcon />
                                                     </IconButton>
                                                     <Box onClick = {() => {
                                                         setCat(x);
                                                         setEditorDialogOpen(true);
                                                     }}>
-                                                        <IconButton>
+                                                        <IconButton sx = {{
+                                                        '&:hover' : {
+                                                            '*' : {
+                                                                color: (theme) => theme.palette.warning.main
+                                                            }
+                                                        }
+                                                    }}>
                                                             <EditIcon />
                                                         </IconButton>
                                                     </Box>
@@ -235,7 +453,7 @@ export const ListCategories = () => {
                         margin: '15px',
                         height: '100%',
                         width: '100%',
-                        display: 'flex',
+                        display: 'flex', 
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexDirection: 'column'
@@ -249,7 +467,19 @@ export const ListCategories = () => {
 
                     </Box>
                     } */}         
-                </Grid>     
+                </Grid>   
+       
+                <Snackbar open={transfer} autoHideDuration={8000} onClose={() => {}}>
+                    <Alert onClose={() => {}} severity="info" sx={{ width: '100%' }}>
+                        Choose a category to transfer {formatter.format(value)} to. Click anywhere else to abort.
+                    </Alert>
+                </Snackbar>  
+                <Snackbar open={success} autoHideDuration={6000} onClose={() => {setSuccess(true)}}>
+                    <Alert onClose={() => {setSuccess(false)}} severity="success" sx={{ width: '100%' }}>
+                        Nice. Monies tranfered. 
+                    </Alert>
+                </Snackbar> 
+      
         </Box>
     );
 }
