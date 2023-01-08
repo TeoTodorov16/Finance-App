@@ -26,7 +26,8 @@ export function CreateCategory(props) {
 
     const [ formValues, setFormValues ] = useState({
         name: '',
-        balance: 0.00
+        balance: 0.00,
+        goal: 0.00,
     });
 
     useEffect(() => {
@@ -34,12 +35,14 @@ export function CreateCategory(props) {
             setFormValues({
                 ...formValues,
                 name: cat.name,
-                balance: cat.balance
+                balance: cat.balance,
+                goal: cat.goal,
             })
         } else {
             setFormValues({
                 name: '',
-                balance: ''
+                balance: '',
+                goal: '',
             })
         }
     },[cat]);
@@ -48,7 +51,8 @@ export function CreateCategory(props) {
         setOpenWrapper(false);
         setFormValues({
             name: '',
-            balance: ''
+            balance: '',
+            goal: ''
         })
     }
 
@@ -75,13 +79,15 @@ export function CreateCategory(props) {
             updateCategory(user.userID, {
                 id: cat.id,
                 name: formValues.name,
-                balance:formValues.balance
+                balance:formValues.balance,
+                goal: formValues.goal,
             });
             return;
         }
         createCategory(user.userID, {
             name: formValues.name,
-            balance:formValues.balance
+            balance:formValues.balance,
+            goal: formValues.goal,
         });
     }
 
@@ -130,6 +136,12 @@ export function CreateCategory(props) {
                         label = 'Initial Balance'
                         name = {'balance'}
                         value = {formValues.balance ? formValues.balance : formValues.balance == '0' ? formValues.balance : ''}
+                        onChange = {handleChange} 
+                    />
+                    <TextField 
+                        label = 'Goal'
+                        name = {'goal'}
+                        value = {formValues.goal ? formValues.goal : formValues.goal == '0' ? formValues.goal : ''}
                         onChange = {handleChange} 
                     />
                 </form>
